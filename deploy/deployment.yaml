@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inlets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inlets
+  template:
+    metadata:
+      labels:
+        app: inlets
+    spec:
+      containers:
+      - name: inlets
+        image: inlets/inlets:2.6.3
+        imagePullPolicy: Always
+        command: ["inlets"]
+        args:
+        - "server"
+        - "--token-from=/var/inlets/TOKEN"
+        volumeMounts:
+          - name: inlets-token-volume
+            mountPath: /var/inlets/
+        resources:
+          limits:
+            cpu: 5m
+            memory: 16Mi
+          requests:
+            cpu: 5m
+            memory: 16Mi
+        ports:
+        - containerPort: 8000
+      volumes:
+        - name: inlets-token-volume
+          secret:
+            secretName: inlets-token

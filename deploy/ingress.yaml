@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: inlets
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/issuer: vasu1124-actvirtual-com
+spec:
+  tls:
+  - hosts:
+    - inlets.vasu1124.apps.k8spin.cloud
+    secretName: inlets-certificate
+  rules:
+  - host: inlets.vasu1124.apps.k8spin.cloud
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: inlets
+          servicePort: 80
